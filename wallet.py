@@ -4,9 +4,8 @@ import pytz
 from transaction import Transaction
 
 class Wallet:
-    def __init__(self, coinbase_resp, client):
+    def __init__(self, coinbase_resp):
         self.coinbase_resp = coinbase_resp
-        self.client = client
 
         self.parse_response()
         self.get_all_transactions()
@@ -21,8 +20,12 @@ class Wallet:
         print(self.currency)
 
     def get_all_transactions(self):
-        self.buys = [Transaction(transaction) for transaction in self.client.get_buys(self.id)["data"]]
-        self.sells = [Transaction(transaction) for transaction in self.client.get_sells(self.id)["data"]]
+        self.buys = [Transaction(transaction) for transaction in Wallet.client.get_buys(self.id)["data"]]
+        self.sells = [Transaction(transaction) for transaction in Wallet.client.get_sells(self.id)["data"]]
 
     def __repr__(self):
         return f"< {self.currency} Wallet >"
+
+    @classmethod
+    def init(cls, client):
+        cls.client = client
