@@ -17,6 +17,7 @@ class Portfolio:
         self.wallets = {wallet["currency"]: Wallet(wallet) for wallet in self.accounts["data"]}
 
     def to_csv(fpath: str) -> None:
+        pass 
 
     @classmethod
     def init(cls, api_key: str, api_secret: str) -> None:
