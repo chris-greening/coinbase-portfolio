@@ -20,5 +20,17 @@ class Trade:
         self.total = Decimal(self.coinbase_resp["total"]["amount"])
         self.price = Decimal(self.coinbase_resp["unit_price"]["amount"])
 
+    def to_dict(self):
+        return {
+            "currency":self.currency,
+            "resource":self.resource,
+            "created_at":self.created_at,
+            "amount":self.amount,
+            "total":self.total,
+            "subtotal":self.subtotal,
+            "fee":self.fee,
+            "price":self.price
+        }
+
     def __repr__(self):
         return f"< {self.resource.upper()}: {self.amount} (${self.total}) {self.currency} >"

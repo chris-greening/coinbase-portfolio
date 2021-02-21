@@ -40,9 +40,14 @@ class Portfolio:
         
         self.buys = [buy for wallet in self.wallets.values() for buy in wallet.buys]
         self.buys = sorted(self.buys, key=lambda x: x.created_at)
+        self.buys_df = pd.DataFrame([buy.to_dict() for buy in self.buys])    
+        
         self.sells = [sell for wallet in self.wallets.values() for sell in wallet.sells]
         self.sells = sorted(self.sells, key=lambda x: x.created_at)
+        self.sells_df = pd.DataFrame([sell.to_dict() for sell in self.sells])
+
         self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
+        self.trades_df = pd.DataFrame([trade.to_dict() for trade in self.trades])
 
         self.transactions = sorted([transaction for wallet in self.wallets.values() for transaction in wallet.transactions], key=lambda x: x.created_at)
         self.transactions_df = pd.DataFrame([tran.to_dict() for tran in self.transactions])

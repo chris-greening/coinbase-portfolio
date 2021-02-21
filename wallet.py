@@ -2,6 +2,8 @@ import datetime
 import pytz
 from decimal import Decimal
 
+import pandas as pd 
+
 from trade import Trade
 from transaction import Transaction
 
@@ -45,11 +47,15 @@ class Wallet:
 
     def _get_all_transactions(self):
         self.transactions = [Transaction(transaction) for transaction in Wallet.client.get_transactions(self.id)["data"]]
+        self.transactions_df = pd.DataFrame([tran.to_dict() for tran in self.transactions])
 
     def _get_all_trades(self):
-        self.buys = [Trade(trade) for trade in Wallet.client.get_buys(self.id)["data"]]
-        self.sells = [Trade(trade) for trade in Wallet.client.get_sells(self.id)["data"]]
+        self.buys = sorted([Trade(trade) for trade in Wallet.client.get_buys(self.id)["data"]], key=lambda x: x.created_at)
+        self.buys_df = pd.DataFrame([buy.to_dict() for buy in self.buys])
+        self.sells = sorted([Trade(trade) for trade in Wallet.client.get_sells(self.id)["data"]], key=lambda x: x.created_at)
+        self.sells_df = pd.DataFrame([sell.to_dict() for sell in self.sells])
         self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
+        self.trades_df = pd.DataFrame([trade.to_dict() for trade in self.trades])
 
     def __repr__(self):
         return f"< {self.currency} Wallet >"

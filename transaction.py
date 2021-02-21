@@ -27,10 +27,10 @@ class Transaction:
         return {
             # "id":self.id,
             # "transaction_id":self.transaction_id,
-            "resource":self.resource,
-            "amount":self.amount,
             "currency":self.currency,
+            "resource":self.resource,
             "created_at":self.created_at,
+            "amount":self.amount,
             "total":self.total
         }
 
