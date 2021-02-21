@@ -13,8 +13,7 @@ class Portfolio:
 
         self.accounts = self.client.get_accounts()
 
-        Wallet.init(self.client)
-        self.wallets = {wallet["currency"]: Wallet(wallet) for wallet in self.accounts["data"]}
+        self._load_wallets()
 
     def to_csv(fpath: str) -> None:
         pass 
@@ -24,3 +23,12 @@ class Portfolio:
         """Sets the API tokens for the Coinbase API"""
         cls.api_key = api_key
         cls.api_secret = api_secret
+
+    def _load_wallets(self):
+        Wallet.init(self.client)
+        self.wallets = {wallet["currency"]: Wallet(wallet) for wallet in self.accounts["data"]}
+        self.buys = [buy for wallet in self.wallets.values() for buy in wallet.buys]
+        self.buys = sorted(self.buys, key=lambda x: x.created_at)
+
+        self.sells = [sell for wallet in self.wallets.values() for sell in wallet.sells]
+        self.sells = sorted(self.sells, key=lambda x: x.created_at)
