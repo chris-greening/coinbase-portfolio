@@ -27,8 +27,11 @@ class Portfolio:
     def _load_wallets(self):
         Wallet.init(self.client)
         self.wallets = {wallet["currency"]: Wallet(wallet) for wallet in self.accounts["data"]}
+        
         self.buys = [buy for wallet in self.wallets.values() for buy in wallet.buys]
         self.buys = sorted(self.buys, key=lambda x: x.created_at)
-
         self.sells = [sell for wallet in self.wallets.values() for sell in wallet.sells]
         self.sells = sorted(self.sells, key=lambda x: x.created_at)
+        self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
+
+        self.transactions = sorted([transaction for wallet in self.wallets.values() for transaction in wallet.transactions], key=lambda x: x.created_at)

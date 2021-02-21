@@ -1,5 +1,6 @@
 import datetime
 import pytz
+from decimal import Decimal
 
 from trade import Trade
 from transaction import Transaction
@@ -13,7 +14,7 @@ class Wallet:
         self._get_all_transactions()
 
     def parse_response(self):
-        self.amount = float(self.coinbase_resp["balance"].amount)
+        self.amount = Decimal(self.coinbase_resp["balance"].amount)
         self.currency = self.coinbase_resp["currency"]
         self.created_at = datetime.datetime.fromisoformat(self.coinbase_resp["created_at"].replace(
             'Z', '+00:00')).astimezone(pytz.timezone("America/New_York"))
@@ -28,6 +29,7 @@ class Wallet:
     def _get_all_trades(self):
         self.buys = [Trade(trade) for trade in Wallet.client.get_buys(self.id)["data"]]
         self.sells = [Trade(trade) for trade in Wallet.client.get_sells(self.id)["data"]]
+        self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
 
     def __repr__(self):
         return f"< {self.currency} Wallet >"
