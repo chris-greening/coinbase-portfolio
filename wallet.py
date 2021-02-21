@@ -25,6 +25,13 @@ class Wallet:
         self.balance = Decimal(self.coinbase_resp["native_balance"]["amount"])
         print(self.currency)
 
+    @classmethod
+    def init(cls, client):
+        cls.client = client
+
+    def __repr__(self):
+        return f"< {self.currency} Wallet >"
+
     def _calculate_net_invested(self):
         self.net_invested = Decimal(0)
         for transaction in self.transactions:
@@ -56,10 +63,3 @@ class Wallet:
         self.sells_df = pd.DataFrame([sell.to_dict() for sell in self.sells])
         self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
         self.trades_df = pd.DataFrame([trade.to_dict() for trade in self.trades])
-
-    def __repr__(self):
-        return f"< {self.currency} Wallet >"
-
-    @classmethod
-    def init(cls, client):
-        cls.client = client
