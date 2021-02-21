@@ -16,7 +16,7 @@ class Portfolio:
         self._load_wallets()
         self._calculations()
 
-    def to_csv(fpath: str) -> None:
+    def to_csv(self, fpath: str) -> None:
         pass 
 
     @classmethod
