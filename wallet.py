@@ -23,7 +23,19 @@ class Wallet:
         self.balance = Decimal(self.coinbase_resp["native_balance"]["amount"])
         print(self.currency)
 
-    
+    def _calculate_net_invested(self):
+        self.net_invested = Decimal(0)
+        for transaction in self.transactions:
+            amt = transaction.total
+            self.net_invested += amt
+
+    def _calculate_net_gain(self):
+        self.net_gain = self.balance - self.net_invested
+
+    def _calculations(self):
+        self._calculate_net_invested()
+        self._calculate_net_gain()
+
     def _get_all_transactions(self):
         self.transactions = [Transaction(transaction) for transaction in Wallet.client.get_transactions(self.id)["data"]]
 
