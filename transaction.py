@@ -23,6 +23,17 @@ class Transaction:
         transaction_type = Transaction.TYPE_TO_RESOURCE_MAP[self.resource]
         self.transaction_id = self.coinbase_resp[transaction_type]["id"]
 
+    def to_dict(self):
+        return {
+            # "id":self.id,
+            # "transaction_id":self.transaction_id,
+            "resource":self.resource,
+            "amount":self.amount,
+            "currency":self.currency,
+            "created_at":self.created_at,
+            "total":self.total
+        }
+
     def __repr__(self):
         transaction_type = Transaction.TYPE_TO_RESOURCE_MAP[self.resource]
         return f"< {transaction_type.upper()}: {self.amount} (${self.total}) {self.currency} >"

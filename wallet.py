@@ -32,9 +32,16 @@ class Wallet:
     def _calculate_net_gain(self):
         self.net_gain = self.balance - self.net_invested
 
+    def _calculate_net_growth(self):
+        try:
+            self.net_growth = (self.balance-self.net_invested)/self.net_invested
+        except:
+            self.net_growth = Decimal(0)
+
     def _calculations(self):
         self._calculate_net_invested()
         self._calculate_net_gain()
+        self._calculate_net_growth()
 
     def _get_all_transactions(self):
         self.transactions = [Transaction(transaction) for transaction in Wallet.client.get_transactions(self.id)["data"]]

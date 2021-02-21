@@ -32,6 +32,7 @@ class Portfolio:
         self.balance = sum([wallet.balance for wallet in self.wallets.values()])
         self.net_invested = sum([wallet.net_invested for wallet in self.wallets.values()])
         self.net_gain = sum([wallet.net_gain for wallet in self.wallets.values()])
+        self.net_growth = (self.balance-self.net_invested)/self.net_invested
 
     def _load_wallets(self):
         Wallet.init(self.client)
@@ -44,3 +45,4 @@ class Portfolio:
         self.trades = sorted(self.buys + self.sells, key=lambda x: x.created_at)
 
         self.transactions = sorted([transaction for wallet in self.wallets.values() for transaction in wallet.transactions], key=lambda x: x.created_at)
+        self.transactions_df = pd.DataFrame([tran.to_dict() for tran in self.transactions])
