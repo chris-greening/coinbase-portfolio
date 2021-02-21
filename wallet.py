@@ -12,6 +12,7 @@ class Wallet:
         self.parse_response()
         self._get_all_trades()
         self._get_all_transactions()
+        self._calculations()
 
     def parse_response(self):
         self.amount = Decimal(self.coinbase_resp["balance"].amount)
@@ -19,10 +20,10 @@ class Wallet:
         self.created_at = datetime.datetime.fromisoformat(self.coinbase_resp["created_at"].replace(
             'Z', '+00:00')).astimezone(pytz.timezone("America/New_York"))
         self.id = self.coinbase_resp["id"]
-        self.balance = self.coinbase_resp["native_balance"]["amount"]
+        self.balance = Decimal(self.coinbase_resp["native_balance"]["amount"])
         print(self.currency)
 
-    # def _calculate_diff(self):
+    
     def _get_all_transactions(self):
         self.transactions = [Transaction(transaction) for transaction in Wallet.client.get_transactions(self.id)["data"]]
 

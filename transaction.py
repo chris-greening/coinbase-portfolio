@@ -18,7 +18,7 @@ class Transaction:
         self.id = self.coinbase_resp["id"]
         self.created_at = datetime.datetime.fromisoformat(self.coinbase_resp["created_at"].replace(
             'Z', '+00:00')).astimezone(pytz.timezone("America/New_York"))
-        self.total = self.coinbase_resp["native_amount"]["amount"]
+        self.total = Decimal(self.coinbase_resp["native_amount"]["amount"])
         self.resource = self.coinbase_resp["type"]
         transaction_type = Transaction.TYPE_TO_RESOURCE_MAP[self.resource]
         self.transaction_id = self.coinbase_resp[transaction_type]["id"]
